@@ -42,6 +42,3 @@ RUN npm install -g generator-express-angular
 COPY ./scripts/user-add.sh /root/user-add.sh
 RUN chmod u+x /root/user-add.sh \
   && echo "1"
-
-#RUN adduser --disabled-password --gecos "" app && \
-#  echo "app ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers1
