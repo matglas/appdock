@@ -37,12 +37,11 @@ RUN npm install -g yo
 RUN npm install -g generator-angular 
 RUN npm install -g grunt-cli
 RUN npm install -g compass
+RUN npm install -g generator-express-angular
 
-RUN adduser --disabled-password --gecos "" app && \
-  echo "app ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+COPY ./scripts/user-add.sh /root/user-add.sh
+RUN chmod u+x /root/user-add.sh \
+  && echo "1"
 
-ENV HOME /home/app
-RUN mkdir /home/app/src && \
-    chown app:app /home/app/src
-
-WORKDIR /home/app/src
+#RUN adduser --disabled-password --gecos "" app && \
+#  echo "app ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers1
