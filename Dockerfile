@@ -22,7 +22,7 @@ RUN set -ex \
   done
 
 ENV NPM_CONFIG_LOGLEVEL info
-ENV NODE_VERSION 4.2.3
+ENV NODE_VERSION 4.2.4
 
 RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" \
   && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
@@ -32,11 +32,13 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
   && rm "node-v$NODE_VERSION-linux-x64.tar.gz" SHASUMS256.txt.asc
 
 # Add global npm packages.
-RUN npm install -g bower 
-RUN npm install -g yo
-RUN npm install -g grunt-cli
-RUN npm install -g compass
+RUN npm install -g npm
+RUN npm install -g yo@1.1.0
+RUN npm install -g generator-karma@~0.5.0
 RUN npm install -g generator-express-angular
+#RUN npm install -g bower
+#RUN npm install -g grunt-cli
+#RUN npm install -g compass
 
 COPY ./scripts/user-add.sh /root/user-add.sh
 RUN chmod u+x /root/user-add.sh
