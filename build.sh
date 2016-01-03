@@ -1,13 +1,55 @@
 #!/usr/bin/env bash
 
-docker build --tag appdock:latest .
+docker build --tag matglas/appdock:latest .
+
+echo ""
+echo "Build images"
+docker images | head -1
+docker images | grep appdock
 
 WORKUID=`id -u`
 WORKGID=`id -g`
-docker run -e="WORK_UID=$WORKUID" -e="WORK_GID=$WORKGID" appdock:latest /root/user-add.sh
+echo ""
+echo "Start container from latest build."
+RUNID=`docker run -d -e="WORK_UID=$WORKUID" -e="WORK_GID=$WORKGID" appdock:latest`
 
-BUILDID=`docker ps -l -q`
-docker commit $BUILDID --change="WORKDIR /home/app/src" appdock:latest
+STARTPID=$!
+wait $STARTPID
 
-docker rm $BUILDID
-docker rm `docker ps -l -q`
+echo "Run id: $RUNID"
+EMPTY=docker ps
+
+#docker exec $RUNID env
+#docker exec $RUNID id
+#docker exec $RUNID ls -la /root
+docker exec $RUNID /root/user-add.sh
+
+echo ""
+echo "Running containers"
+docker ps
+
+echo ""
+echo "Stop container"
+docker stop $RUNID
+
+STOPPID=$!
+wait $STOPPID
+
+docker wait $RUNID
+
+echo ""
+echo "Create new commit"
+BUILDID=`docker commit --change="WORKDIR /home/app/src" $RUNID appdock:latest`
+echo "Build id: $BUILDID"
+
+BUILDPID=$!
+wait $BUILDPID
+
+echo ""
+echo "Remove container"
+docker rm $RUNID
+
+echo ""
+echo "Build images"
+docker images | head -1
+docker images | grep appdock

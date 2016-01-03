@@ -34,11 +34,15 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
 # Add global npm packages.
 RUN npm install -g bower 
 RUN npm install -g yo
-RUN npm install -g generator-angular 
 RUN npm install -g grunt-cli
 RUN npm install -g compass
 RUN npm install -g generator-express-angular
 
 COPY ./scripts/user-add.sh /root/user-add.sh
-RUN chmod u+x /root/user-add.sh \
-  && echo "1"
+RUN chmod u+x /root/user-add.sh
+
+# Extra run to create new build.
+RUN touch /build-version.txt \
+  && echo "Version: 0.1-dev5" > /build-version.txt
+
+ENTRYPOINT bash

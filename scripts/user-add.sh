@@ -8,4 +8,3 @@ adduser --uid=$WORK_UID --gid=$WORK_GID --disabled-password --gecos "" app && \
 echo "Change ownership to app:app on /home/app"
 chown -R app:app /home/app
 
-mkdir /home/app/src
